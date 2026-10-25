@@ -12,3 +12,5 @@ Aplicación desarrollada siguiendo la metología de GitHib Spec
 
 # Paso 2. Qué se va a construir
 Bookify es una aplicación de seguimiento de libros leidos y por leer. El usuario podrá guardar libros y marcar si los ha leido o no. En la home se tendrá la lista de libros apareciendo primero los libros no leidos y luego los leidos. Al hacer click en un libro debe aparecer la página de detalle del libro desde donde se pondrá cambiar su estado a leido o no leido o eliminarlo. Desde la home se podrá ñadir un nuevo libro. 
+
+# Paso 3. Resolución de dudas del agente
