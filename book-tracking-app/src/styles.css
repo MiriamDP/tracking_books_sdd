@@ -153,6 +153,11 @@ body {
   padding: 20px;
 }
 
+.create-panel {
+  width: min(100%, 620px);
+  margin: 0 auto;
+}
+
 .form-panel h2,
 .list-panel h2,
 .detail-panel h2 {

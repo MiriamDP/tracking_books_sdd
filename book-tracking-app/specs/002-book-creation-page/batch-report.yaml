@@ -1,0 +1,119 @@
+batch_id: "B01"
+completed_tasks: ["T003", "T004", "T005"]
+blocked_tasks:
+  - task_id: "T001"
+    reason: "La instrucción del usuario limita la implementación a src/ y pidió retirar las pruebas generadas anteriormente."
+    required_task_ids: []
+  - task_id: "T002"
+    reason: "La instrucción del usuario limita la implementación a src/ y pidió retirar la configuración y pruebas de navegador generadas anteriormente."
+    required_task_ids: []
+  - task_id: "T006"
+    reason: "La prueba de aceptación preexistente espera el formulario en home y falla porque REQ-001 exige retirarlo; actualizarla requeriría modificar tests fuera de src/."
+    required_task_ids: ["T001", "T002"]
+files_changed:
+  T003:
+    - file: "src/views/create-view.js"
+      change_type: "created"
+      description: "Formulario dedicado con validación, portada, persistencia, errores y cancelación."
+  T004:
+    - file: "src/views/home-view.js"
+      change_type: "modified"
+      description: "Retirado el formulario y enlazada la acción de alta a la nueva ruta."
+  T005:
+    - file: "src/app.js"
+      change_type: "modified"
+      description: "Añadido el enrutamiento exacto de #/books/new antes del detalle."
+    - file: "src/styles.css"
+      change_type: "modified"
+      description: "Añadida presentación centrada y de ancho limitado para el formulario separado."
+upstream_artifacts_consumed:
+  T003:
+    - artifact: "specs/002-book-creation-page/spec.md"
+      used_for: "Campos, validaciones, guardado, cancelación y errores requeridos."
+    - artifact: "specs/001-book-reading-tracker/contracts/ui-contract.md"
+      used_for: "Campos actuales, límite de portada, mensajes y flujo de persistencia."
+    - artifact: "src/model/book.js and src/persistence/book-repository.js"
+      used_for: "Reutilizar modelo y persistencia existentes."
+  T004:
+    - artifact: "specs/002-book-creation-page/spec.md"
+      used_for: "Retirar controles de creación del home y conservar acceso a la creación."
+  T005:
+    - artifact: "specs/002-book-creation-page/plan.md"
+      used_for: "Añadir #/books/new respetando la navegación hash existente."
+evidence_mapping:
+  T003:
+    - upstream: "spec.md#REQ-003,REQ-004,REQ-005,REQ-006"
+      output: "src/views/create-view.js"
+      evidence: "Smoke test JSDOM: guardado pendiente, cancelación, título vacío y error de cuota."
+  T004:
+    - upstream: "spec.md#REQ-001,REQ-002"
+      output: "src/views/home-view.js"
+      evidence: "Smoke test JSDOM: home sin controles de formulario y CTA a la ruta nueva."
+  T005:
+    - upstream: "plan.md#Implementation Steps/1.2"
+      output: "src/app.js"
+      evidence: "Smoke test JSDOM: navegación hash a la vista dedicada y regreso a home."
+traceability:
+  - requirement: "REQ-001"
+    plan_item: "1.2"
+    task: "T004"
+    files: ["src/views/home-view.js"]
+    status: "partial"
+  - requirement: "REQ-002"
+    plan_item: "1.2"
+    task: "T004"
+    files: ["src/views/home-view.js"]
+    status: "partial"
+  - requirement: "REQ-003"
+    plan_item: "1.1"
+    task: "T003"
+    files: ["src/views/create-view.js"]
+    status: "partial"
+  - requirement: "REQ-004"
+    plan_item: "1.2"
+    task: "T005"
+    files: ["src/app.js", "src/views/create-view.js"]
+    status: "partial"
+  - requirement: "REQ-005"
+    plan_item: "1.2"
+    task: "T005"
+    files: ["src/app.js", "src/views/create-view.js"]
+    status: "partial"
+  - requirement: "REQ-006"
+    plan_item: "1.1"
+    task: "T003"
+    files: ["src/views/create-view.js"]
+    status: "partial"
+protocol_violation: false
+errors: []
+warnings:
+  - "npm test: 13 aprobados y 1 fallo. El fallo es la prueba antigua que crea desde home, incompatible con REQ-001."
+  - "11/11 pruebas unitarias pasan; node --check pasa para los módulos de src/."
+  - "El smoke test JSDOM en línea verificó creación, retorno, cancelación, título vacío y fallo de cuota."
+  - "La prueba con navegador no se completó: faltó el ejecutable headless de Chromium requerido por la herramienta."
+test_results:
+  T003:
+    command: "node --check src/views/create-view.js; smoke test JSDOM en línea"
+    passed: 1
+    failed: 0
+    skipped: 0
+    failures: []
+  T004:
+    command: "node --check src/views/home-view.js; smoke test JSDOM en línea"
+    passed: 1
+    failed: 0
+    skipped: 0
+    failures: []
+  T005:
+    command: "node --check src/app.js; smoke test JSDOM en línea"
+    passed: 1
+    failed: 0
+    skipped: 0
+    failures: []
+  T006:
+    command: "npm test"
+    passed: 13
+    failed: 1
+    skipped: 0
+    failures:
+      - "US1: adding a valid book shows it as pending and persists it — intenta escribir en #title desde home."

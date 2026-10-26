@@ -1,0 +1,63 @@
+metadata:
+  generated: "2026-10-26"
+  source_plan: "specs/002-book-creation-page/plan.md"
+  target_tasks: "specs/002-book-creation-page/tasks.md"
+
+summary:
+  total_plan_items: 3
+  covered_plan_items: 3
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 6
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "User Story 1 — Crear un libro en una página independiente"
+    items:
+      - item_id: "1.1"
+        description: "Implementar la vista dedicada de creación"
+        tasks:
+          - task_id: "T003"
+            description: "Crear src/views/create-view.js preservando el flujo de alta"
+        notes: ""
+      - item_id: "1.2"
+        description: "Conectar la ruta y simplificar la página principal"
+        tasks:
+          - task_id: "T004"
+            description: "Actualizar src/views/home-view.js para retirar el formulario y enlazar la acción de alta"
+          - task_id: "T005"
+            description: "Actualizar src/app.js para resolver la ruta hash de creación"
+        notes: ""
+      - item_id: "1.3"
+        description: "Verificar los recorridos de creación y regresión"
+        tasks:
+          - task_id: "T001"
+            description: "Añadir pruebas JSDOM del formulario en tests/acceptance/book-tracker.spec.js"
+          - task_id: "T002"
+            description: "Configurar Playwright y añadir e2e/book-creation.spec.js"
+          - task_id: "T006"
+            description: "Ejecutar npm test y comprobar los recorridos completos"
+        notes: ""
+
+missing_plan_items: []
+orphan_tasks: []
+
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["REQ-003", "REQ-004", "REQ-005", "REQ-006"]
+    tasks: ["T003"]
+    full_trace: "REQ-003,REQ-004,REQ-005,REQ-006 → Phase-1.1 → T003"
+  - plan_item: "1.2"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-004", "REQ-005"]
+    tasks: ["T004", "T005"]
+    full_trace: "REQ-001,REQ-002,REQ-004,REQ-005 → Phase-1.2 → T004,T005"
+  - plan_item: "1.3"
+    source_requirements: ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "REQ-005", "REQ-006"]
+    tasks: ["T001", "T002", "T006"]
+    full_trace: "REQ-001,REQ-002,REQ-003,REQ-004,REQ-005,REQ-006 → Phase-1.3 → T001,T002,T006"
+
+validation:
+  passed: true
+  errors: []
+  warnings: []
