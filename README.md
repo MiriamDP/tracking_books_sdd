@@ -61,6 +61,34 @@ cd .\book-tracking-app
 
 Si la carpeta de instalación es distinta, sustituye la ruta de `node.exe` por la ruta real. Si `node.exe` no existe, instala Node.js antes de continuar.
 
+### Para ver los cambios de la rama `feature/pagina-creacion-libro`
+
+Los cambios de esta funcionalidad están en la rama `feature/pagina-creacion-libro`. Para probarlos, abre PowerShell en la raíz del repositorio y cambia a esa rama:
+
+```powershell
+git status
+git switch feature/pagina-creacion-libro
+git branch --show-current
+```
+
+El último comando debe mostrar `feature/pagina-creacion-libro`. Si Git indica que la rama no existe localmente, actualiza las referencias remotas y crea una rama local que siga a la remota:
+
+```powershell
+git fetch origin
+git switch --track origin/feature/pagina-creacion-libro
+```
+
+Antes de cambiar de rama, guarda o aparta cualquier cambio local que quieras conservar. Una vez en la rama, inicia la aplicación desde `book-tracking-app`:
+
+```powershell
+cd .\book-tracking-app
+npm install
+npm start
+```
+
+Abre [http://localhost:8000](http://localhost:8000). En la página principal, pulsa **Añadir libro** para abrir la página de creación; al guardar o cancelar volverás a la lista. Mantén la misma dirección (`localhost:8000`) para consultar los datos guardados en ese origen del navegador.
+
+
 ## Pruebas
 
 La suite incluye pruebas unitarias para el modelo y la persistencia, además de pruebas de aceptación para los flujos principales:
