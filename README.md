@@ -1,66 +1,76 @@
-# tracking_books_sdd
-Aplicación desarrollada siguiendo la metología de GitHib Spec
+# Bookify
 
-# Paso 1. Indicar restricciones de la aplicación
-* La aplicacion debe ser sencilla de mantener
-* Evitar un diseño complejo, optando por la solucion mas sencilla en cada caso
-* No debe tener una base de datos
-* No debe tener una API
-* La información se guardara en localStorage
-* La aplicacion debe funcionar en local exclusivamente
-* No hay roles, ni autenticacion y autorizacion de ningun tipo
+Bookify es una aplicación web local para organizar libros pendientes y leídos. Se ha desarrollado con HTML, CSS y JavaScript, siguiendo los documentos de especificación de GitHub Spec Kit del repositorio.
 
-# Paso 2. Qué se va a construir
-Bookify es una aplicación de seguimiento de libros leidos y por leer. El usuario podrá guardar libros y marcar si los ha leido o no. En la home se tendrá la lista de libros apareciendo primero los libros no leidos y luego los leidos. Al hacer click en un libro debe aparecer la página de detalle del libro desde donde se pondrá cambiar su estado a leido o no leido o eliminarlo. Desde la home se podrá ñadir un nuevo libro. 
+## Funcionalidad
 
-# Paso 3. Resolución de dudas del agente
+- Añadir libros con título obligatorio y autor opcional.
+- Adjuntar una portada opcional. Se conserva si ocupa menos de 2 MiB; si ocupa 2 MiB o más, el libro se guarda sin portada y se muestra un aviso.
+- Consultar los libros agrupados: primero los pendientes y después los leídos.
+- Abrir el detalle, cambiar el estado de lectura y eliminar libros con confirmación.
+- Guardar libros, estados y portadas en `localStorage` del navegador.
 
-# Paso 4. Planificación técnica (Plan)
+La aplicación no requiere cuentas, backend, API, base de datos ni servicios remotos. Los datos permanecen en el navegador y origen local utilizados; borrar los datos del navegador puede eliminarlos.
 
-Se ha utilizado el comando `/speckit-plan` de GitHub Spec Kit para generar la planificación técnica de Bookify a partir de la especificación y la constitución del proyecto.
+## Requisitos
 
-Se ha decidido desarrollar una aplicación web estática utilizando HTML, CSS y JavaScript, sin frameworks, backend, API ni base de datos. La información se almacenará exclusivamente en `localStorage`.
+- Windows y PowerShell (los comandos siguientes están escritos para PowerShell).
+- Node.js 20 o posterior. La instalación de Node.js incluye `npm`; se necesita para instalar las dependencias de pruebas y ejecutar los scripts del proyecto.
+- Un navegador moderno.
 
-Se han generado los siguientes documentos en `book-tracking-app/specs/001-book-reading-tracker/`:
+Comprueba que Node.js y npm están disponibles:
 
-- `plan.md`: planificación técnica y estructura del proyecto.
-- `research.md`: decisiones técnicas y su justificación.
-- `data-model.md`: modelo de datos de los libros.
-- `quickstart.md`: instrucciones de ejecución y validación.
-- `contracts/ui-contract.md`: comportamiento esperado de la interfaz.
+```powershell
+node --version
+npm --version
+```
 
-# Paso 5. Desglose de tareas (Tasks)
+Si alguno no se reconoce, instala la versión LTS desde [nodejs.org](https://nodejs.org/) y abre una nueva terminal para que se actualice el `PATH`. Si Node.js ya está instalado en la ubicación estándar pero esta sesión no tiene esa ruta, puedes añadirla temporalmente en PowerShell:
 
-Se ha ejecutado `/speckit-tasks` para transformar la especificación y el plan técnico en tareas concretas de implementación.
+```powershell
+$env:Path = "C:\Program Files\nodejs;$env:Path"
+node --version
+npm --version
+```
 
-Se ha generado el archivo `tasks.md`, que contiene **35 tareas**, organizadas en seis fases:
+El cambio solo afecta a la ventana actual de PowerShell.
 
-1. Preparación del proyecto (Setup).
-2. Componentes y lógica fundamentales (Foundational).
-3. Historia de usuario 1: añadir y consultar libros.
-4. Historia de usuario 2: cambiar el estado de lectura.
-5. Historia de usuario 3: eliminar libros.
-6. Revisión y mejoras finales (Polish).
+## Instalar, probar y arrancar
 
-Las tareas incluyen la implementación de funcionalidades, la persistencia local y las pruebas unitarias y de aceptación.
+Desde la raíz del repositorio:
 
-# Paso 6. Análisis de consistencia (Analyze)
+```powershell
+cd .\book-tracking-app
+npm install
+npm test
+npm start
+```
 
-Se ha utilizado `/speckit-analyze` para comprobar la coherencia entre la especificación, la constitución, el plan técnico y las tareas.
+`npm install` instala las dependencias de desarrollo utilizadas por las pruebas. Para ejecutar la aplicación, `npm start` inicia el servidor estático local en **http://localhost:8000**. Mantén abierta esa terminal mientras uses la app y pulsa `Ctrl+C` para detenerlo. Puedes ejecutar `npm test` desde otra terminal.
 
-El primer análisis detectó seis incidencias relacionadas con las pruebas, los criterios de aceptación, la ejecución local, la paralelización de tareas y la terminología utilizada.
+Abre [http://localhost:8000](http://localhost:8000) en el navegador. Usa siempre el mismo origen (`localhost:8000`) para conservar y consultar los mismos datos de `localStorage`.
 
-Se corrigieron los documentos de planificación y se ejecutó nuevamente el análisis.
+## Si PowerShell no reconoce `npm` o `node`
 
-**Resultados finales:**
+Node.js puede estar instalado pero no incluido en el `PATH` de la terminal. Cierra y vuelve a abrir PowerShell después de instalarlo o utiliza el bloque temporal de `PATH` anterior. Si está instalado en la ubicación estándar, también puedes iniciar la app sin npm así:
 
-- 14 requisitos funcionales analizados.
-- 7 criterios de éxito analizados.
-- 21 de 21 requisitos cubiertos por tareas (100 %).
-- 0 incidencias críticas.
-- 0 incidencias altas.
-- 1 incidencia media pendiente: diferencia terminológica entre MB y MiB en la especificación original y los documentos de planificación.
+```powershell
+cd .\book-tracking-app
+& "C:\Program Files\nodejs\node.exe" .\server.js
+```
 
-La especificación original se ha conservado sin modificaciones. La interpretación de 2 MiB para el límite de las portadas queda pendiente de confirmación por el equipo.
+Si la carpeta de instalación es distinta, sustituye la ruta de `node.exe` por la ruta real. Si `node.exe` no existe, instala Node.js antes de continuar.
 
-Tras el análisis, la planificación queda preparada para continuar con la implementación mediante `/speckit-implement`.
+## Pruebas
+
+La suite incluye pruebas unitarias para el modelo y la persistencia, además de pruebas de aceptación para los flujos principales:
+
+```powershell
+cd .\book-tracking-app
+npm install
+npm test
+```
+
+## Documentación del proyecto
+
+La especificación y los artefactos de diseño están en [`book-tracking-app/specs/001-book-reading-tracker/`](./book-tracking-app/specs/001-book-reading-tracker/), incluidos la especificación funcional, el plan, las tareas, el modelo de datos, los contratos de interfaz y la guía de validación rápida.

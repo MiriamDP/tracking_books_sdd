@@ -2,20 +2,26 @@
 
 ## Prerrequisitos
 
+- Node.js 20 o posterior si se desea utilizar el servidor local incluido o ejecutar las pruebas.
 - Navegador moderno con JavaScript habilitado.
 - No se necesita cuenta, base de datos, API ni conexión de red.
-- Abrir el proyecto desde un origen local estable. Puede utilizarse un servidor estático local
-  si el navegador restringe módulos ES al abrir `index.html` directamente; ese servidor solo
-  sirve archivos durante el desarrollo, no es un backend ni un servicio remoto del producto.
+- La aplicación requiere un origen local estable porque utiliza módulos ES y `localStorage`.
+  El servidor incluido solo sirve archivos durante el desarrollo; no es un backend ni un
+  servicio remoto del producto.
 
 ## Arranque
 
-1. Servir la carpeta raíz del proyecto con cualquier servidor estático local, si el navegador lo
-   requiere. El servidor es únicamente una herramienta local de desarrollo y no participa en la
-   lógica, persistencia ni funcionamiento normal de Bookify.
-2. Abrir la URL local en el navegador.
-3. Confirmar que la aplicación muestra el estado vacío y el aviso sobre el alcance de
-   `localStorage`.
+Desde PowerShell, en la carpeta `book-tracking-app`:
+
+```powershell
+npm install
+npm start
+```
+
+Abre `http://localhost:8000` en el navegador. Mantén abierta la terminal mientras uses la
+aplicación y pulsa `Ctrl+C` para detener el servidor. `npm install` instala dependencias de
+desarrollo para las pruebas; para iniciar la app también se puede ejecutar `node server.js`
+sin npm, siempre que Node.js esté instalado.
 
 ## Escenarios de aceptación
 
