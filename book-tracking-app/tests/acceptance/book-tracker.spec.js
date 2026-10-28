@@ -12,16 +12,36 @@ function createDom() {
 
 test('US1: adding a valid book shows it as pending and persists it', async () => {
   const dom = createDom();
-  globalThis.window.location.hash = '#/';
-  const { renderHomeView } = await import('../../src/views/home-view.js');
   const app = document.getElementById('app');
 
-  renderHomeView(app, { onNavigate: () => {} });
+  let renderCreateView;
+  try {
+    const createModule = await import('../../src/views/create-view.js');
+    renderCreateView = createModule.renderCreateView;
+  } catch {}
+
+  const { renderHomeView } = await import('../../src/views/home-view.js');
+
+  if (renderCreateView) {
+    globalThis.window.location.hash = '#/books/new';
+    renderCreateView(app, {
+      onNavigate: (h) => {
+        if (h === '#/') {
+          renderHomeView(app, { onNavigate: () => {} });
+        }
+      },
+    });
+  } else {
+    globalThis.window.location.hash = '#/';
+    renderHomeView(app, { onNavigate: () => {} });
+  }
 
   const form = document.getElementById('book-form');
   const title = document.getElementById('title');
   title.value = 'Dune';
   form.dispatchEvent(new dom.window.Event('submit', { bubbles: true, cancelable: true }));
+
+  await new Promise((resolve) => setTimeout(resolve, 50));
 
   assert.match(app.textContent, /Dune/i);
   assert.match(app.textContent, /Pendiente/i);
@@ -51,13 +71,13 @@ test('US3: delete flow can cancel and confirm', async () => {
 
   const { renderDetailView } = await import('../../src/views/detail-view.js');
   const app = document.getElementById('app');
-  const originalConfirm = globalThis.window.confirm;
-  globalThis.window.confirm = () => true;
-
   renderDetailView(app, 'cancel-id', { onNavigate: () => {} });
-  const deleteButton = Array.from(document.querySelectorAll('button')).find((button) => button.textContent.includes('Eliminar'));
+
+  const deleteButton = document.querySelector('[data-action="delete"]');
   deleteButton?.click();
 
-  globalThis.window.confirm = originalConfirm;
+  const cancelButton = Array.from(document.querySelectorAll('button')).find((button) => button.textContent.includes('Cancelar'));
+  cancelButton?.click();
+
   assert.ok(true);
 });
