@@ -31,6 +31,7 @@ Si alguno no se reconoce, instala la versión LTS desde [nodejs.org](https://nod
 $env:Path = "C:\Program Files\nodejs;$env:Path"
 node --version
 npm --version
+
 ```
 
 El cambio solo afecta a la ventana actual de PowerShell.
