@@ -1,76 +1,178 @@
-# Bookify
+# Bookify — Repositorio de código y especificaciones
 
-Bookify es una aplicación web local para organizar libros pendientes y leídos. Se ha desarrollado con HTML, CSS y JavaScript, siguiendo los documentos de especificación de GitHub Spec Kit del repositorio.
+> **Aplicación web ligera para la gestión de lecturas personales (libros pendientes y leídos)**  
+> Proyecto desarrollado mediante la metodología **Spec-Driven Development (SDD)** con [GitHub Spec Kit](https://github.com/github/spec-kit).
 
-## Funcionalidad
+---
 
-- Añadir libros con título obligatorio y autor opcional.
-- Adjuntar una portada opcional. Se conserva si ocupa menos de 2 MiB; si ocupa 2 MiB o más, el libro se guarda sin portada y se muestra un aviso.
-- Consultar los libros agrupados: primero los pendientes y después los leídos.
-- Abrir el detalle, cambiar el estado de lectura y eliminar libros con confirmación.
-- Guardar libros, estados y portadas en `localStorage` del navegador.
+## Autores
+* **Díaz Plaza, Míriam**
+* **Jiménez Muñoz, Álvaro**
+* **Bellón Payer, David**
 
-La aplicación no requiere cuentas, backend, API, base de datos ni servicios remotos. Los datos permanecen en el navegador y origen local utilizados; borrar los datos del navegador puede eliminarlos.
+---
 
-## Requisitos
+## Enlaces rápidos
 
-- Windows y PowerShell (los comandos siguientes están escritos para PowerShell).
-- Node.js 20 o posterior. La instalación de Node.js incluye `npm`; se necesita para instalar las dependencias de pruebas y ejecutar los scripts del proyecto.
-- Un navegador moderno.
+| Recurso | Enlace | Descripción |
+| :--- | :--- | :--- |
+| **Repositorio de documentación** | [github.com/MiriamDP/GitHub_Spec_SDD](https://github.com/MiriamDP/GitHub_Spec_SDD) | Memoria metodológica, análisis de fases, dificultades y presentación en PDF |
+| **Presentación en Canva** | [canva.link/jiung27g8rxlw27](https://canva.link/jiung27g8rxlw27) | Diapositivas de la práctica |
+| **Despliegue Vercel (rama main)** | [book-tracking-main.vercel.app](https://book-tracking-main.vercel.app) | Versión inicial (formulario y lista en dos columnas) |
+| **Despliegue Vercel (rama feature)** | [book-tracking-creation-page.vercel.app](https://book-tracking-creation-page.vercel.app) | Versión evolucionada (página dedicada de alta `#/books/new`) |
 
-Comprueba que Node.js y npm están disponibles:
+---
 
-```powershell
-node --version
-npm --version
+## Funcionalidades de la aplicación
+
+* **Añadir libros:** Registro con título obligatorio y autor opcional.
+* **Portadas:** Permite adjuntar imágenes de portada (convertidas a DataURL en cliente, con validación de límite de 2 MiB para no saturar el almacenamiento).
+* **Clasificación automática:** Separa dinámicamente los libros entre **Pendientes** y **Leídos**.
+* **Detalle y cambio de estado:** Permite abrir la ficha de cada libro para alternar su estado de lectura o eliminarlo con confirmación previa.
+* **Persistencia local:** Todos los datos se guardan en el `localStorage` del navegador, sin necesidad de servidores externos ni bases de datos remotas.
+
+---
+
+## Comparativa de ramas
+
+El repositorio contiene las dos fases del desarrollo realizadas con Spec Kit:
+
+| Rama | Interfaz y navegación | Detalles técnicos | Despliegue en Vercel |
+| :--- | :--- | :--- | :--- |
+| **`main`** *(MVP inicial)* | **Dos columnas integradas** | El formulario de creación se encuentra en un panel lateral dentro de `home-view.js`. Enrutamiento básico para inicio y detalle. | **[Ver en Vercel (main)](https://book-tracking-main.vercel.app)** |
+| **`feature/pagina-creacion-libro`** *(Gestión del cambio)* | **Página de creación dedicada** | El formulario se desacopla en `create-view.js` accesible en la ruta `#/books/new`. La biblioteca ocupa todo el ancho principal. | **[Ver en Vercel (feature)](https://book-tracking-creation-page.vercel.app)** |
+
+---
+
+## Capturas de pantalla de la aplicación
+
+### 1. Rama `main`: versión inicial en dos columnas
+La vista principal integra tanto el formulario para dar de alta libros como el listado de lecturas en una misma pantalla:
+
+![Bookify rama main - Formulario y biblioteca](docs/screenshots/screenshot_main.png)
+
+---
+
+### 2. Rama `feature/pagina-creacion-libro`: versión con cambio de requisitos
+La biblioteca pasa a ocupar todo el espacio disponible y se añade el botón de acción en la cabecera:
+
+![Bookify rama feature - Biblioteca principal](docs/screenshots/screenshot_feature_home.png)
+
+Al pulsar en **Añadir libro**, la aplicación navega a la nueva vista dedicada centrada exclusivamente en el formulario:
+
+![Bookify rama feature - Formulario dedicado](docs/screenshots/screenshot_feature_create.png)
+
+---
+
+## Estructura del proyecto y especificaciones SDD
+
+El código y las especificaciones generadas por GitHub Spec Kit se encuentran organizados dentro de `book-tracking-app/`:
+
+```text
+tracking_books_sdd/
+├── docs/
+│   └── screenshots/              # Capturas de pantalla de la interfaz
+└── book-tracking-app/
+    ├── index.html                # Punto de entrada HTML5
+    ├── package.json              # Configuración y dependencias
+    ├── build.js                  # Script de empaquetado para producción (carpeta dist/)
+    ├── vercel.json               # Configuración de despliegue en Vercel
+    ├── server.js                 # Servidor estático local para desarrollo
+    ├── src/
+    │   ├── app.js                # Enrutador cliente basado en hash (#/books/...)
+    │   ├── styles.css            # Estilos de la aplicación
+    │   ├── model/
+    │   │   └── book.js           # Entidad Book, validaciones y estados
+    │   ├── persistence/
+    │   │   └── book-repository.js # Adaptador para localStorage
+    │   └── views/
+    │       ├── home-view.js      # Vista principal de la biblioteca
+    │       ├── detail-view.js    # Vista modal de detalle
+    │       └── create-view.js    # Vista dedicada de creación (rama feature)
+    ├── tests/
+    │   ├── unit/                 # Tests unitarios del modelo y persistencia
+    │   └── acceptance/           # Tests de aceptación con JSDOM
+    └── specs/                    # Especificaciones generadas con GitHub Spec Kit
+        ├── 001-book-reading-tracker/ # Artefactos de la versión inicial (MVP)
+        │   ├── spec.md           # Requisitos funcionales e historias de usuario
+        │   ├── plan.md           # Plan de arquitectura y contratos
+        │   └── tasks.md          # Lista de tareas técnicas atómicas
+        └── 002-book-creation-page/  # Artefactos del cambio de requisitos (rama feature)
+            ├── spec.md           # Requisitos de la nueva vista desacoplada
+            ├── plan.md           # Plan técnico del cambio
+            ├── tasks.md          # Tareas del evolutivo
+            └── checkpoints/      # Reportes de verificación de la IA
 ```
 
-Si alguno no se reconoce, instala la versión LTS desde [nodejs.org](https://nodejs.org/) y abre una nueva terminal para que se actualice el `PATH`. Si Node.js ya está instalado en la ubicación estándar pero esta sesión no tiene esa ruta, puedes añadirla temporalmente en PowerShell:
+---
 
-```powershell
-$env:Path = "C:\Program Files\nodejs;$env:Path"
-node --version
-npm --version
-```
+## Guía de instalación, pruebas y ejecución local
 
-El cambio solo afecta a la ventana actual de PowerShell.
+### 1. Requisitos previos
+* **Node.js**: Versión 20 o superior instalada.
+* **npm**: Incluido con Node.js.
+* Un navegador web moderno.
 
-## Instalar, probar y arrancar
-
-Desde la raíz del repositorio:
+### 2. Instalación de dependencias
+Abre una terminal en la raíz del repositorio y entra en la carpeta de la aplicación:
 
 ```powershell
 cd .\book-tracking-app
 npm install
+```
+
+### 3. Ejecutar la suite de tests
+Para comprobar que los modelos y los criterios de aceptación pasan las pruebas (`node:test` + `jsdom`):
+
+```powershell
 npm test
+```
+
+### 4. Compilar para producción (build)
+Genera los archivos estáticos listos para producción dentro de la carpeta `dist/`:
+
+```powershell
+npm run build
+```
+
+### 5. Iniciar el servidor local
+Para arrancar el servidor estático de desarrollo:
+
+```powershell
+npm start
+```
+Abre tu navegador en **[http://localhost:8000](http://localhost:8000)**.  
+*(Consejo: mantén siempre el mismo puerto para conservar los datos guardados en el `localStorage` del navegador).*
+
+---
+
+## Cómo cambiar de rama en local
+
+Para revisar y probar el código de ambas versiones desde Git:
+
+```powershell
+# Probar la versión inicial (formulario empotrado en 2 columnas):
+git switch main
+cd .\book-tracking-app
+npm start
+
+# Probar la versión con cambio de requisitos (página dedicada #/books/new):
+git switch feature/pagina-creacion-libro
+cd .\book-tracking-app
 npm start
 ```
 
-`npm install` instala las dependencias de desarrollo utilizadas por las pruebas. Para ejecutar la aplicación, `npm start` inicia el servidor estático local en **http://localhost:8000**. Mantén abierta esa terminal mientras uses la app y pulsa `Ctrl+C` para detenerlo. Puedes ejecutar `npm test` desde otra terminal.
+---
 
-Abre [http://localhost:8000](http://localhost:8000) en el navegador. Usa siempre el mismo origen (`localhost:8000`) para conservar y consultar los mismos datos de `localStorage`.
+## Despliegue en producción con Vercel
 
-## Si PowerShell no reconoce `npm` o `node`
+Ambas ramas se han configurado para desplegarse como sitios estáticos en la red CDN de Vercel:
+* `build.js` copia `index.html` y la carpeta `src/` a `dist/`.
+* `vercel.json` apunta a `dist/` como directorio público.
+* `.vercelignore` excluye tests, especificaciones y archivos de desarrollo del paquete final.
 
-Node.js puede estar instalado pero no incluido en el `PATH` de la terminal. Cierra y vuelve a abrir PowerShell después de instalarlo o utiliza el bloque temporal de `PATH` anterior. Si está instalado en la ubicación estándar, también puedes iniciar la app sin npm así:
-
+Para desplegar manualmente desde la CLI de Vercel:
 ```powershell
 cd .\book-tracking-app
-& "C:\Program Files\nodejs\node.exe" .\server.js
+npx vercel deploy --prod
 ```
-
-Si la carpeta de instalación es distinta, sustituye la ruta de `node.exe` por la ruta real. Si `node.exe` no existe, instala Node.js antes de continuar.
-
-## Pruebas
-
-La suite incluye pruebas unitarias para el modelo y la persistencia, además de pruebas de aceptación para los flujos principales:
-
-```powershell
-cd .\book-tracking-app
-npm install
-npm test
-```
-
-## Documentación del proyecto
-
-La especificación y los artefactos de diseño están en [`book-tracking-app/specs/001-book-reading-tracker/`](./book-tracking-app/specs/001-book-reading-tracker/), incluidos la especificación funcional, el plan, las tareas, el modelo de datos, los contratos de interfaz y la guía de validación rápida.
